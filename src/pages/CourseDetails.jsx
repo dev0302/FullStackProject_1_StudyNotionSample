@@ -78,12 +78,13 @@ function CourseDetails() {
     <div className="flex flex-col text-richblack-5 bg-richblack-900">
       {/* Hero Section */}
       <div className="relative bg-richblack-800 py-12 lg:py-24">
-        <div className="mx-auto box-content max-w-maxContent px-4 lg:relative">
+        <div className="w-11/12 mx-auto">
+          <div className="mx-auto box-content max-w-maxContent px-4 lg:relative">
           <div className="flex flex-col justify-center gap-4 py-5 lg:w-[60%]">
             <p className="text-sm text-richblack-300">Home / Catalog / {courseName}</p>
             <h1 className="text-4xl font-bold sm:text-5xl">{courseName}</h1>
             <p className="text-lg text-richblack-200">{description}</p>
-            <div className="flex flex-wrap items-center gap-2 text-md">
+            <div className="flex flex-wrap items-center gap-2 text-md ">
               <span className="text-yellow-50">{avgReviewCount}</span>
               <RatingStars Review_Count={avgReviewCount} Star_Size={20} />
               <span>{`(${ratingAndReviews.length} reviews)`}</span>
@@ -153,12 +154,13 @@ function CourseDetails() {
             </div>
             </div>
         </div>
+        </div>
       </div>
 
       {/* Main Content Area */}
       <div className="mx-auto box-content max-w-maxContent px-4 lg:w-[1260px]">
         <div className="mx-auto max-w-maxContentTab lg:mx-0 lg:max-w-[810px]">
-          <div className="my-8 border border-richblack-600 p-8 rounded-sm">
+          <div className="my-8 border border-richblack-600 p-8 w-10/12 rounded-sm">
             <p className="text-3xl font-semibold">What you'll learn</p>
             <div className="mt-5 text-richblack-100">{whatWillYouLearn}</div>
           </div>
