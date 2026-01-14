@@ -24,15 +24,16 @@ const OTPSchema = new mongoose.Schema(
 
 // since we are creating pre middleware so after schema and before export
 // a function to send email->
-async function sendVerificationEmail(email,otp) {
+async function sendVerificationEmail(email, otp) {
     try {
-        const mailRespone = await mailSender(email, "Verification Email", otpTemplate(otp));
-        console.log("Email sent successfully",mailRespone.response);
-        
+        const mailResponse = await mailSender(email, "Verification Email", otpTemplate(otp));
+        if (mailResponse && mailResponse.messageId) {
+            console.log("Email sent successfully", mailResponse.messageId);
+        } else {
+            console.log("Email failed to send, but document saved.");
+        }
     } catch (error) {
-        console.log("Error occured while sending mails: ",error);
-        throw error;   
-        
+        console.log("Error occurred while sending mails: ", error);
     }
 }
 
