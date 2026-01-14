@@ -159,7 +159,7 @@ function Navbar() {
           <div className="flex items-center gap-2 px-4 py-2 bg-richblack-800 rounded-lg mb-4 border border-richblack-700">
              <AiOutlineSearch className="text-richblack-200" />
              <input type="text" 
-             placeholder={isFocused ? "this feature is under construction..." : "Search..."}
+             placeholder={isFocused ? "this feature is under construction..." : "Search...(under construction)"}
              className="bg-transparent text-sm text-richblack-5 focus:outline-none w-full" />
           </div>
 
