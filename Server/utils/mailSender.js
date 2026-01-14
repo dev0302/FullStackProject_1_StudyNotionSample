@@ -19,6 +19,8 @@ const mailSender = async (email, title, body) => {
       // ✅ Add these to prevent the "Stuck" state if the network is slow
       connectionTimeout: 10000, // 10 seconds
       greetingTimeout: 10000,
+      logger: true,
+        debug: true,
     });
 
     // 2. Send the mail
