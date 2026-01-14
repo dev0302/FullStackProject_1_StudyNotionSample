@@ -1,0 +1,163 @@
+/* Import all weights */
+@import '@fontsource/inter/300.css';
+@import '@fontsource/inter/400.css';
+@import '@fontsource/inter/500.css';
+@import '@fontsource/inter/600.css';
+@import '@fontsource/inter/700.css';
+
+/* Or import specific weights only */
+@import '@fontsource/inter/400.css';
+@import '@fontsource/inter/500.css';
+@import '@fontsource/inter/600.css';
+
+
+
+:root {
+  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  /* line-height: 1.5;
+  font-weight: 400; */
+
+  /* color-scheme: light dark;
+  color: rgba(255, 255, 255, 0.87);
+  background-color: #242424; */
+  color: #DBDDEA;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+html,body{
+  overflow-x: hidden;
+}
+
+.active {
+  color: #FFE83D;
+  transition: all 200ms ease;
+}
+
+
+/* homepage section-1 */
+
+.codeblock1 {
+  width: 372.95px;
+  height: 257.05px;
+  border-radius: 100%;
+  left: calc(50% - 372.95px / 2 - 76.53px);
+  top: calc(50% - 257.05px / 2 - 47.47px);
+  background: linear-gradient(
+    123.77deg,
+    #8a2be2 -6.46%,
+    #ffa500 59.04%,
+    #f8f8ff 124.53%
+  );
+  opacity: 0.2;
+  filter: blur(34px);
+  transform: matrix(1, 0, -0.03, 1, 0, 0);
+}
+.codeblock2 {
+  position: absolute;
+  width: 372.95px;
+  height: 257.05px;
+  left: calc(50% - 372.95px / 2 - 76.53px);
+  top: calc(50% - 257.05px / 2 - 47.47px);
+  border-radius: 100%;
+  background: linear-gradient(
+    118.19deg,
+    #1fa2ff -3.62%,
+    #12d8fa 50.44%,
+    #a6ffcb 104.51%
+  );
+  opacity: 0.2;
+  filter: blur(34px);
+  transform: matrix(1, 0, -0.03, 1, 0, 0);
+}
+.code-border {
+  border: 2px solid;
+  border-image-slice: 1;
+  border-width: 2px;
+  border-image-source: linear-gradient(to right bottom, #ffffff38, #ffffff00);
+  background: linear-gradient(
+    111.93deg,
+    rgba(14, 26, 45, 0.24) -1.4%,
+    rgba(17, 30, 50, 0.38) 104.96%
+  );
+  /* backdrop-filter: blur(26px); */
+}
+
+/* homepage section-2 */
+.homepage_bg{
+  background: url("../src/assets/Images/bghome.svg");
+}
+
+/* for all inuput box bg and border colour ------------ */
+.inputBox_style {
+  width: 100%;
+  padding: 12px;
+  border-radius: 0.5rem;
+
+  background-color: #161d29; /* richblack-800 */
+  color: #f1f2ff;           /* richblack-5 */
+
+  border: 1px solid #2c333f; /* richblack-700 */
+  outline: none;
+
+  font-size: 14px;
+}
+
+.inputBox_style::placeholder {
+  color: #6e727f;
+}
+
+.inputBox_style:focus {
+  border-color: #facc15; /* yellow-50 */
+  border-opacity: 0.6;
+}
+
+
+/* another inputBox style for dashboard/settings/profileInformation */
+/* for all inuput box bg and border colour ------------ */
+.inputBox_style2 {
+  width: 100%;
+  padding: 12px;
+  border-radius: 0.5rem;
+
+  background-color: #2C333F; /* richblack-800 */
+  color: #f1f2ff8f;           /* richblack-5 */
+
+  border: 1px solid #2c333f; /* richblack-700 */
+  outline: none;
+
+  border-bottom: 1px solid #afb2bfcd;
+
+  font-size: 14px;
+}
+
+.inputBox_style2::placeholder {
+  color: #6e727f;
+}
+
+.inputBox_style2:focus {
+  color: #f1f2ff;
+  border-color: rgba(135, 206, 250, 0.6); /* lightskyblue with opacity */
+}
+
+
+/* ----------------------------------------- */
+
+/* Hide scrollbar but allow scrolling --> for only dashboard i.e where "no-scrollbar" class is being used */ 
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;     /* Firefox */
+}
