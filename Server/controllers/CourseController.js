@@ -11,6 +11,7 @@ const Section = require("../models/Section");
 const SubSection = require("../models/SubSection");
 const { convertSecondsToDuration } = require("../utils/secToDuration");
 const CourseProgress = require("../models/CourseProgress");
+const PaymentFake = require("../models/PaymentFake");
 
 
 // createCourse
@@ -327,122 +328,77 @@ exports.getFullCourseDetails = async (req, res) => {
 
 
 // enroll the student in the courses
-// Import the model at the top of your controller file
-const PaymentFake = require("../models/PaymentFake");
-
-// enroll the student in the courses
 exports.enrollStudents = async (req, res) => {
   try {
     const { courses, userId } = req.body
 
-    // 1. Validation
     if (!Array.isArray(courses) || courses.length === 0 || !userId) {
-      return res.status(400).json({
-        success: false,
-        message: "Please provide an array of course IDs and a user ID",
-      })
+      return res.status(400).json({ success: false, message: "Missing Details" })
     }
+
+    // 1. Pre-fetch User and Courses to avoid multiple DB calls inside loop
+    const user = await User.findById(userId);
+    if(!user) return res.status(404).json({success:false, message:"User not found"});
 
     let totalAmount = 0;
+    // We can use Promise.all to fetch/verify courses faster
+    const courseDetails = await Course.find({ '_id': { $in: courses } });
+    courseDetails.forEach(course => totalAmount += course.price);
 
-    // --- NEW: PURCHASE HISTORY LOGIC ---
-    // Calculate total amount and verify courses exist
-    for (const courseId of courses) {
-        const course = await Course.findById(courseId);
-        if(!course) {
-            return res.status(404).json({ success: false, message: `Course not found: ${courseId}` });
-        }
-        totalAmount += course.price;
-    }
-
-    // Create the Purchase History record
     const paymentRecord = await PaymentFake.create({
-        courses: courses,
+        courses,
         user: userId,
         amount: totalAmount,
     });
-    // -----------------------------------
 
-    for (const courseId of courses) {
-      // 1.1 Enroll student in course
-      const enrolledCourse = await Course.findByIdAndUpdate(
-        courseId,
-        { $addToSet: { studentEnrolled: userId } },
-        { new: true }
-      )
+    // 2. Perform DB Updates in Parallel (FASTER)
+    // Instead of waiting for one course to finish before starting the next
+    await Promise.all(courses.map(async (courseId) => {
+        // Enroll student in course
+        await Course.findByIdAndUpdate(courseId, { $addToSet: { studentEnrolled: userId } });
 
-      if (!enrolledCourse) {
-        return res.status(404).json({
-          success: false,
-          message: `Course not found: ${courseId}`,
-        })
-      }
+        // Create Progress
+        const courseProgress = await CourseProgress.create({
+            courseId: courseId,
+            userId: userId,
+            completedVideos: [],
+        });
 
-      // 1.2 ✅ THE FIX FOR YOUR ERROR:
-      // Ensure the model is registered. Using CourseProgress.create() 
-      // is only possible if the model is correctly imported at the top.
-      const courseProgress = await CourseProgress.create({
-        courseId: courseId, // Ensure this matches your Schema (courseId vs courseID)
-        userId: userId,
-        completedVideos: [],
-      })
+        // Update User
+        await User.findByIdAndUpdate(userId, {
+            $addToSet: {
+                courses: courseId,
+                courseProgress: courseProgress._id,
+            },
+        });
+    }));
 
-      // 1.3 Update User's enrolled courses and progress list
-      const enrolledStudent = await User.findByIdAndUpdate(
-        userId,
-        {
-          $addToSet: {
-            courses: courseId,
-            courseProgress: courseProgress._id,
-          },
-        },
-        { new: true }
-      )
-
-      if (!enrolledStudent) {
-        return res.status(404).json({
-          success: false,
-          message: "User not found",
-        })
-      }
-
-      // 1.4 Send email
-      try {
-        await mailSender(
-          enrolledStudent.email,
-          `Successfully Enrolled into ${enrolledCourse.courseName}`,
-          courseEnrollmentEmail(
-            enrolledCourse.courseName,
-            `${enrolledStudent.firstName} ${enrolledStudent.lastName}`
-          )
-        )
-      } catch (e) {
-        console.error("Email failure:", e.message)
-      }
-    }
-
-    // ✅ THE UI UPDATE FIX:
-    // Fetch the updated user and populate everything so the frontend
-    // gets the full details needed to change the button to "Enrolled"
+    // 3. Prepare data for Frontend
     const updatedUser = await User.findById(userId)
       .populate("courses")
       .populate("courseProgress")
-      .populate("additionalDetails")
       .exec()
 
-    return res.status(200).json({
+    // 🔥 CRITICAL: Send Response FIRST so UI unfreezes
+    res.status(200).json({
       success: true,
-      message: "Student enrolled successfully and purchase history created",
-      user: updatedUser, // 🔥 Send this back to sync Redux
-      paymentId: paymentRecord._id, // Optional: send payment ref back
-    })
+      message: "Enrollment successful",
+      user: updatedUser,
+    });
+
+    // 4. Send Emails in the background (DON'T AWAIT THEM)
+    // This allows the response to reach the user while emails are still being sent
+    courseDetails.forEach((course) => {
+        mailSender(
+            user.email,
+            `Successfully Enrolled into ${course.courseName}`,
+            courseEnrollmentEmail(course.courseName, `${user.firstName} ${user.lastName}`)
+        ).catch(err => console.error("Background Email Error:", err));
+    });
+
   } catch (error) {
     console.error("Enrollment Error:", error)
-    return res.status(500).json({
-      success: false,
-      message: "Internal server error during enrollment",
-      error: error.message, // This helps you debug exactly what Mongoose is complaining about
-    })
+    return res.status(500).json({ success: false, message: error.message })
   }
 }
 
