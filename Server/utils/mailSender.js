@@ -12,6 +12,10 @@ const mailSender = async (email, title, body) => {
         user: process.env.MAIL_USER,
         pass: process.env.MAIL_PASS, // This MUST be a 16-digit App Password
       },
+      tls: {
+            // This helps bypass some restrictive cloud firewalls
+            rejectUnauthorized: false 
+        },
       // ✅ Add these to prevent the "Stuck" state if the network is slow
       connectionTimeout: 10000, // 10 seconds
       greetingTimeout: 10000,
