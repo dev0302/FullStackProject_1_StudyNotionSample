@@ -81,8 +81,8 @@ function Navbar() {
             </button>
           )}
 
-          {/* ICON CLUSTER - Tightened for real phone screens */}
-          <div className="flex items-center gap-x-0.5 sm:gap-x-1.5 bg-richblack-800/50 p-1 sm:p-1.5 rounded-full border border-richblack-700 shrink-0">
+          {/* ICON CLUSTER */}
+          <div className="flex items-center gap-x-1 sm:gap-x-1.5 bg-richblack-800/50 p-1 sm:p-1.5 rounded-full border border-richblack-700 shrink-0">
             
             {/* 🛒 Cart */}
             {user && user?.accountType !== ACCOUNT_TYPE.INSTRUCTOR && (
@@ -96,18 +96,26 @@ function Navbar() {
               </NavLink>
             )}
 
-            {/* ⚙️ Settings - Forced visibility with shrink-0 */}
+            {/* ⚙️ Settings */}
             {token && (
               <NavLink to="/dashboard/settings" className="p-1.5 sm:p-2 text-richblack-200 hover:text-white hover:bg-richblack-700 rounded-full transition-all shrink-0">
                 <IoSettingsOutline  className="text-lg sm:text-xl" />
               </NavLink>
             )}
 
-            {/* 👤 Profile / Auth Buttons */}
+            {/* 👤 Auth Buttons / Profile Dropdown */}
             {token === null ? (
-              <div className="hidden md:flex items-center gap-x-2 ml-1">
-                <NavLink to="/login" className="text-sm font-medium text-richblack-100 px-2 sm:px-4">Log in</NavLink>
-                <NavLink to="/signup" className="bg-richblack-700 text-white px-3 sm:px-4 py-2 rounded-full text-xs sm:text-sm font-medium">Sign up</NavLink>
+              <div className="flex items-center gap-x-1 sm:gap-x-2 px-1">
+                <NavLink to="/login">
+                    <button className="rounded-full border border-richblack-700 bg-richblack-800 px-2 py-1.5 sm:px-4 sm:py-2 text-xs sm:text-sm font-medium text-richblack-100 transition-all hover:scale-95">
+                        Log in
+                    </button>
+                </NavLink>
+                <NavLink to="/signup">
+                    <button className="rounded-full border border-richblack-700 bg-richblack-700 px-2 py-1.5 sm:px-4 sm:py-2 text-xs sm:text-sm font-medium text-richblack-5 transition-all hover:scale-95">
+                        Sign up
+                    </button>
+                </NavLink>
               </div>
             ) : (
               <div className="pl-0.5 sm:pl-1 shrink-0">
@@ -147,7 +155,7 @@ function Navbar() {
         </div>
 
         <div className="flex flex-col gap-y-1">
-          {/* Mobile Search - Added here to clear space from main navbar */}
+          {/* Mobile Search */}
           <div className="flex items-center gap-2 px-4 py-2 bg-richblack-800 rounded-lg mb-4 border border-richblack-700">
              <AiOutlineSearch className="text-richblack-200" />
              <input type="text" 
