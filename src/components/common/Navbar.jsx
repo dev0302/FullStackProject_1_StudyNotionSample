@@ -10,6 +10,8 @@ import { categories } from "../../services/api"
 import ProfileDropDown from "../core/HomePage/ProfileDropDown"
 import CatalogDropdown from "./CatalogDropdown"
 import { ACCOUNT_TYPE } from "../../utils/constants"
+import { IoSettingsOutline } from "react-icons/io5";
+
 
 function Navbar() {
   const navigate = useNavigate();
@@ -97,7 +99,7 @@ function Navbar() {
             {/* ⚙️ Settings - Forced visibility with shrink-0 */}
             {token && (
               <NavLink to="/dashboard/settings" className="p-1.5 sm:p-2 text-richblack-200 hover:text-white hover:bg-richblack-700 rounded-full transition-all shrink-0">
-                <VscSettingsGear className="text-lg sm:text-xl" />
+                <IoSettingsOutline  className="text-lg sm:text-xl" />
               </NavLink>
             )}
 
@@ -148,7 +150,9 @@ function Navbar() {
           {/* Mobile Search - Added here to clear space from main navbar */}
           <div className="flex items-center gap-2 px-4 py-2 bg-richblack-800 rounded-lg mb-4 border border-richblack-700">
              <AiOutlineSearch className="text-richblack-200" />
-             <input type="text" placeholder="Search..." className="bg-transparent text-sm text-richblack-5 focus:outline-none w-full" />
+             <input type="text" 
+             placeholder={isFocused ? "this feature is under construction..." : "Search..."}
+             className="bg-transparent text-sm text-richblack-5 focus:outline-none w-full" />
           </div>
 
           {NavbarLinks.map((link, index) => (
@@ -176,7 +180,7 @@ function Navbar() {
           
           {token && (
             <NavLink to="/dashboard/settings" onClick={() => setOpen(false)} className="text-lg text-richblack-200 py-3 flex items-center gap-2 border-b border-white/5">
-              <VscSettingsGear /> Settings
+              <IoSettingsOutline  /> Settings
             </NavLink>
           )}
         </div>
