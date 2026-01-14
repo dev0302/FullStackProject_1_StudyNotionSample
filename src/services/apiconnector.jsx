@@ -1,6 +1,10 @@
 import axios from "axios";
 
-export const axiosInstance = axios.create({});
+export const axiosInstance = axios.create({
+  baseURL: import.meta.env.VITE_BASE_URL,
+  withCredentials: true, // REQUIRED FOR COOKIES
+});
+
 
 export const apiConnector = (method,url,bodyData, headers, params) => {
     return axiosInstance({
