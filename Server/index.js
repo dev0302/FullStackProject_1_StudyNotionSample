@@ -31,12 +31,14 @@ cloudinaryConnect();
 // middlewares
 app.use(express.json()); //express
 app.use(cookieParser()); //cookieParser
-// app.use(
-//     cors({
-//         origin:"http://localhost:3000",
-//         // credentials:true
-//     })
-// )
+
+app.use(
+  cors({
+    origin: true,       // allow all origins
+    credentials: true,  // allow cookies & auth headers
+  })
+);
+
 app.use(
     fileUpload({
         useTempFiles:true,
@@ -47,24 +49,24 @@ app.use(
 
 
 // this will allow frontend req to backend from diff servers too---------
-const allowedOrigins = ["http://localhost:5173", "http://localhost:3000"];
+// const allowedOrigins = ["http://localhost:5173", "http://localhost:3000"];
 
-app.use(
-  cors({
+// app.use(
+//   cors({
     
-    origin: function(origin, callback) {
-      // allow requests with no origin like mobile apps or Postman
-      if (!origin) return callback(null, true);
-      if (allowedOrigins.includes(origin)) {
-        return callback(null, true);
+//     origin: function(origin, callback) {
+//       // allow requests with no origin like mobile apps or Postman
+//       if (!origin) return callback(null, true);
+//       if (allowedOrigins.includes(origin)) {
+//         return callback(null, true);
 
-      } else {
-        return callback(new Error("Not allowed by CORS"));
-      }
-    },
-    credentials: true, // allow cookies/auth headers
-  })
-);
+//       } else {
+//         return callback(new Error("Not allowed by CORS"));
+//       }
+//     },
+//     credentials: true, // allow cookies/auth headers
+//   })
+// );
 
 // ----------------------------------------------------
 
