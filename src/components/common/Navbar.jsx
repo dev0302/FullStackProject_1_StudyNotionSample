@@ -8,7 +8,7 @@ import { useEffect, useState } from "react"
 import { apiConnector } from "../../services/apiconnector"
 import { categories } from "../../services/api"
 import ProfileDropDown from "../core/HomePage/ProfileDropDown"
-import CatalogDropdown from "./CatalogDropDown"
+import CatalogDropdown from "./CatalogDropdown"
 import { ACCOUNT_TYPE } from "../../utils/constants"
 
 function Navbar() {
