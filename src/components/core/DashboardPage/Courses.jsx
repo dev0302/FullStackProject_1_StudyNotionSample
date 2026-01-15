@@ -121,7 +121,18 @@ function Courses() {
                           : "bg-yellow-50 text-richblack-900 hover:bg-yellow-100 shadow-[2px_2px_0px_0px_rgba(255,255,255,0.18)]"
                         }`}
                     >
-                      {isEnrolled ? "Already Enrolled" : isInCart ? "Added to Cart" : "Add to Cart"}
+                      {isEnrolled ? (
+                        "Already Enrolled"
+                      ) : isInCart ? (
+                        "Added to Cart"
+                      ) : (
+                        <div className="flex flex-col items-center">
+                          <span>Add to Cart</span>
+                          <span className="text-[12px] font-medium lowercase italic">
+                            (currently free for testing)
+                          </span>
+                        </div>
+                      )}
                     </button>
                   </div>
                 </div>
