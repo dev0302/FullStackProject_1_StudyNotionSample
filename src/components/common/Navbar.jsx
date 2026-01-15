@@ -54,7 +54,7 @@ function Navbar() {
               placeholder={isFocused ? "this feature is under construction..." : "Search..."}
               onFocus={() => setIsFocused(true)}
               onBlur={() => setIsFocused(false)}
-              className="bg-transparent border-none focus:ring-0 focus:outline-none text-sm text-richblack-5 w-40"
+              className="bg-transparent border-none focus:ring-0 focus:outline-none text-sm text-richblack-5 max-[1090px]:hidden w-14 max-[1150px]:w-8 xl:w-40"
             />
           </div>
           <ul className="flex gap-x-4 pr-4">

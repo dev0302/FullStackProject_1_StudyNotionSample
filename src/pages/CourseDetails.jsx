@@ -96,7 +96,7 @@ function CourseDetails() {
 
           {/* Right Floating Card (Instructor vs Student View) */}
           {/* Floating Buy Card */}
-            <div className="right-[1rem] top-[60px] mx-auto hidden min-h-[450px] w-full max-w-[410px] translate-y-24 flex-col gap-4 rounded-xl bg-richblack-700 p-6 lg:absolute lg:flex lg:translate-y-0 shadow-[0_20px_50px_rgba(0,0,0,0.3)] border border-richblack-600">
+            <div className="sm:right-[1rem] sm:top-[60px] sm:mx-auto  sm:min-h-[450px] sm:w-full sm:max-w-[410px] sm:translate-y-24 flex-col gap-4 rounded-xl bg-richblack-700 p-6 lg:absolute lg:flex lg:translate-y-0 shadow-[0_20px_50px_rgba(0,0,0,0.3)] border border-richblack-600">
             <img 
                 src={thumbnail} 
                 alt="thumbnail" 
