@@ -67,112 +67,84 @@ function VerifyEmail() {
     }
 
   return (
-    <div className='min-h-[calc(100vh-5.5rem)] grid place-items-center'>
-        {
-            loading ? (
-                <div className='text-white'>Loading...</div>
-            ) :
-            (
-                <div className="max-w-[500px] p-4 lg:p-8">
-                    <h1 className="text-richblack-5 font-semibold text-[1.875rem] leading-[2.375rem]">Verify Email</h1>
-                    
-                    <p className="text-[1.125rem] leading-[1.625rem] my-4 text-richblack-100">
-                        A verification code has been sent to you. Enter the code below
-                    </p>
+        <div className='min-h-[calc(100vh-5.5rem)] grid place-items-center'>
+            {
+                loading ? (
+                    <div className='text-white'>Loading...</div>
+                ) :
+                (
+                    <div className="max-w-[500px] p-4 lg:p-8">
+                        <h1 className="text-richblack-5 font-semibold text-[1.875rem] leading-[2.375rem]">Verify Email</h1>
+                        
+                        <p className="text-[1.125rem] leading-[1.625rem] my-4 text-richblack-100">
+                            A verification code has been sent to you. Enter the code below
+                        </p>
 
-                    <form onSubmit={handleVerifyAndSignup}>
-                        {/* ✅ NEW OTP COMPONENT */}
-                        <OTPInput
-                            value={otp}
-                            onChange={setOtp}
-                            maxLength={6}
-                            containerClassName="flex justify-between gap-[6px]"
-                            render={({ slots }) => (
-                                <>
-                                {slots.map((slot, index) => {
-                                    const {
-                                    ref,
-                                    value,
-                                    onChange,
-                                    onKeyDown,
-                                    onFocus,
-                                    onBlur,
-                                    } = slot;
-
-                                    return (
-                                    <div
-                                        key={index}
-                                        className="relative"
-                                        >
-                                        <input
-                                            ref={ref}
-                                            onChange={onChange}
-                                            onKeyDown={onKeyDown}
-                                            onFocus={onFocus}
-                                            onBlur={onBlur}
-                                            className={`
-                                            w-[48px] lg:w-[60px]
-                                            aspect-square
-                                            border-0
-                                            bg-richblack-800
-                                            rounded-[0.5rem]
-                                            text-transparent
-                                            caret-yellow-50
-                                            text-center
-                                            focus:outline-none
-                                            ${slot.isActive ? "outline outline-2 outline-yellow-50" : ""}
-                                            `}
-                                        />
-
-                                        {/* Visible OTP digit */}
-                                        <div className="pointer-events-none absolute inset-0 flex items-center justify-center text-white text-lg font-semibold">
-                                            {slot.char || "-"}
+                        <form onSubmit={handleVerifyAndSignup}>
+                            <OTPInput
+                                value={otp}
+                                onChange={setOtp}
+                                maxLength={6}
+                                containerClassName="flex justify-between gap-[6px]"
+                                render={({ slots }) => (
+                                    <>
+                                    {slots.map((slot, index) => (
+                                        <div key={index} className="relative">
+                                            <input
+                                                {...slot}
+                                                className={`w-[48px] lg:w-[60px] aspect-square border-0 bg-richblack-800 rounded-[0.5rem] text-transparent caret-yellow-50 text-center focus:outline-none ${slot.isActive ? "outline outline-2 outline-yellow-50" : ""}`}
+                                            />
+                                            <div className="pointer-events-none absolute inset-0 flex items-center justify-center text-white text-lg font-semibold">
+                                                {slot.char || "-"}
+                                            </div>
                                         </div>
-                                        </div>
-
-                                    );
-                                })}
-                                </>
-                            )}
+                                    ))}
+                                    </>
+                                )}
                             />
 
-                        <button
-                            type="submit"
-                            className="w-full bg-yellow-50 py-[12px] px-[12px] rounded-[8px] mt-6 font-medium text-richblack-900"
+                            {/* ✅ ADDED: Hint for users to check All Mail/Spam */}
+                            <p className="mt-4 text-richblack-50 text-base">
+                                Can't find the email? Check your 
+                                
+                                <span className="text-yellow-50 font-medium text-base"> All Mail</span> folders.
+                            </p>
+
+                            <button
+                                type="submit"
+                                className="w-full bg-yellow-50 py-[12px] px-[12px] rounded-[8px] mt-6 font-medium text-richblack-900"
                             >
-                            Verify Email
-                        </button>
-                    </form>
+                                Verify Email
+                            </button>
+                        </form>
 
-                    <div className="mt-6 flex items-center justify-between">
-                        <NavLink to="/signup">
-                        <p className="text-richblack-5 flex items-center gap-x-2">
-                            <BiArrowBack /> Back To Signup
-                        </p>
-                        </NavLink>
+                        <div className="mt-6 flex items-center justify-between">
+                            <NavLink to="/signup">
+                                <p className="text-richblack-5 flex items-center gap-x-2">
+                                    <BiArrowBack /> Back To Signup
+                                </p>
+                            </NavLink>
 
-                        <button
-                            className={`flex items-center gap-x-2 ${
-                                timeLeft > 0 ? "text-richblack-400 cursor-not-allowed" : "text-blue-100"
-                            }`}
-                            // disabled={timeLeft > 0}
-                            onClick={() => {
-                                dispatch(sendOtp(signupData.email, navigate)); //must send navigate
-                                setTimeLeft(300); // restart timer
-                            }}
+                            <button
+                                className={`flex items-center gap-x-2 ${
+                                    timeLeft > 0 ? "text-richblack-400 cursor-not-allowed" : "text-blue-100"
+                                }`}
+                                onClick={() => {
+                                    if(timeLeft === 0) {
+                                        dispatch(sendOtp(signupData.email, navigate));
+                                        setTimeLeft(300);
+                                    }
+                                }}
                             >
-                            <RxCountdownTimer />
-                            {timeLeft > 0 ? `Resend in ${formatTime(timeLeft)}` : "Resend OTP"}
-                        </button>
-
+                                <RxCountdownTimer />
+                                {timeLeft > 0 ? `Resend in ${formatTime(timeLeft)}` : "Resend OTP"}
+                            </button>
+                        </div>
                     </div>
-
-
-                </div>
-            )
-        }
-    </div>
-  )
+                )
+            }
+        </div>
+    );
 }
 
 export default VerifyEmail;
