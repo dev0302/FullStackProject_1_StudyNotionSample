@@ -173,16 +173,17 @@ export function resetPassword(token, password, confirmPassword) {
     return async(dispatch) => {
         dispatch(setLoading(true));
         try{
-        const response = await apiConnector("POST", RESETPASSWORD_API, {password, confirmPassword, token});
+          const response = await apiConnector("POST", RESETPASSWORD_API, {password, confirmPassword, token});
 
-        console.log("RESET Password RESPONSE ... ", response);
+          console.log("RESET Password RESPONSE ... ", response);
 
 
-        if(!response.data.success) {
-            throw new Error(response.data.message);
-        }
+          if(!response.data.success) {
+              throw new Error(response.data.message);
+          }
 
-        toast.success("Password has been reset successfully");
+          toast.success("Password has been reset successfully");
+          navigate("/dashboard/login");
         }
         catch(error) {
         console.log(error.response?.data?.message || "RESET PASSWORD TOKEN Error", error);
