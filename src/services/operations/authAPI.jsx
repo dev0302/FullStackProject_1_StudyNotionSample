@@ -169,7 +169,7 @@ export function getPasswordResetToken(email, setEmailSent) {
 
 
 // updatePassword
-export function resetPassword(token, password, confirmPassword) {
+export function resetPassword(token, password, confirmPassword, navigate) {
     return async(dispatch) => {
         dispatch(setLoading(true));
         try{
