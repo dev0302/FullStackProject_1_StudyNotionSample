@@ -1,4 +1,5 @@
 exports.courseEnrollmentEmail = (courseName, name) => {
+  const clientUrl = process.env.CLIENT_URL || "https://full-stack-project-1-study-notion-s-nine.vercel.app";
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -94,7 +95,7 @@ exports.courseEnrollmentEmail = (courseName, name) => {
   <div class="wrapper">
     <div class="container">
       <div class="header">
-        <a href="https://studynotion-edtech-project.vercel.app">
+        <a href="${clientUrl}">
           <img class="logo" src="https://res.cloudinary.com/deujrq6nv/image/upload/v1767624352/IMG_20260105_201245_avuyxq.jpg" alt="StudyNotion Project Logo">
         </a>
       </div>
@@ -120,7 +121,7 @@ exports.courseEnrollmentEmail = (courseName, name) => {
         </p>
 
         <div class="cta-container">
-          <a href="https://studynotion-edtech-project.vercel.app/dashboard/enrolled-courses" class="cta-button">
+          <a href="${clientUrl}/dashboard/enrolled-courses" class="cta-button">
             Go to Dashboard
           </a>
         </div>
