@@ -1,44 +1,44 @@
-const nodemailer = require("nodemailer");
+const axios = require('axios');
 
 const mailSender = async (email, title, body) => {
-  try {
-    // 1. Create a Transporter
-    let transporter = nodemailer.createTransport({
-      host: process.env.MAIL_HOST,
-      // 🔥 PORT 465 is the industry standard for secure SMTP on cloud servers
-      port: 465, 
-      secure: true, 
-      auth: {
-        user: process.env.MAIL_USER,
-        pass: process.env.MAIL_PASS, // This MUST be a 16-digit App Password
-      },
-      tls: {
-            // This helps bypass some restrictive cloud firewalls
-            rejectUnauthorized: false 
-        },
-      // ✅ Add these to prevent the "Stuck" state if the network is slow
-      connectionTimeout: 10000, // 10 seconds
-      greetingTimeout: 10000,
-      logger: true,
-        debug: true,
-    });
+    try {
+        console.log("hey:",process.env.BREVO_API_KEY);
+        const response = await axios.post(
+            'https://api.brevo.com/v3/smtp/email',
+            {
+                sender: { 
+                    name: "StudyNotion", 
+                    email: process.env.SENDER_EMAIL 
+                },
+                to: [{ email: email }],
+                subject: title,
+                htmlContent: body,
+            },
+            {
+                headers: {
+                    'api-key': process.env.BREVO_API_KEY, // Use 'api-key' header exactly
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                }
+            }
+        );
+        
+        
 
-    // 2. Send the mail
-    let info = await transporter.sendMail({
-      from: '"StudyNotion | Dev" <' + process.env.MAIL_USER + '>', // Improved 'from' format
-      to: `${email}`,
-      subject: `${title}`,
-      html: `${body}`,
-    });
+        console.log("Brevo API Success:", response.data.messageId);
+        return response.data;
 
-    console.log("Email info: ", info);
-    return info;
-
-  } catch (error) {
-    // 🔥 If mail fails, we log it but DON'T let it crash the server
-    console.error("Nodemailer Error: ", error.message);
-    return { error: error.message }; 
-  }
+    } catch (error) {
+        // This will print the EXACT error from Brevo's server
+        console.error("--- BREVO ERROR ---");
+        if (error.response) {
+            console.error("Status:", error.response.status);
+            console.error("Message:", error.response.data.message);
+        } else {
+            console.error("Error:", error.message);
+        }
+        return null;
+    }
 };
 
 module.exports = mailSender;

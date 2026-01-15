@@ -2,50 +2,48 @@ const mongoose = require("mongoose");
 const mailSender = require("../utils/mailSender");
 const otpTemplate = require("../mail/templates/emailVerificationTemplate");
 
-const OTPSchema = new mongoose.Schema(
-    {
-        email:{
-            type:String,
-            trim:true,
-            required:true
-        },
-        otp:{
-            type:String,
-            required:true
-        },
-        createdAt:{
-            type:Date,
-            default:Date.now, //not Date.now()
-            expires:5*60 //5min
-        }
-          
+const OTPSchema = new mongoose.Schema({
+    email: {
+        type: String,
+        trim: true,
+        required: true
+    },
+    otp: {
+        type: String,
+        required: true
+    },
+    createdAt: {
+        type: Date,
+        default: Date.now,
+        expires: 5 * 60 // OTP expires in 5 minutes
     }
-);
+});
 
-// since we are creating pre middleware so after schema and before export
-// a function to send email->
+// Function to send verification email
 async function sendVerificationEmail(email, otp) {
     try {
         const mailResponse = await mailSender(email, "Verification Email", otpTemplate(otp));
-        if (mailResponse && mailResponse.messageId) {
-            console.log("Email sent successfully", mailResponse.messageId);
+        
+        // Flexible check: If we got any response back, it likely worked
+        if (mailResponse) {
+            console.log("OTP Email process completed.");
         } else {
-            console.log("Email failed to send, but document saved.");
+            console.log("Email service returned nothing. Check Brevo logs.");
         }
     } catch (error) {
-        console.log("Error occurred while sending mails: ", error);
+        console.log("Error in OTP Model: ", error);
     }
 }
 
-// pre middleware
+// Pre-save middleware to trigger email before saving OTP to DB
 OTPSchema.pre("save", async function (next) {
-	console.log("New document saved to database");
+    console.log("New OTP document saving to database...");
 
-	// Only send an email when a new document is created
-	if (this.isNew) {
-		await sendVerificationEmail(this.email, this.otp);
-	}
-	next();
+    // Only send an email when a new document is created
+    if (this.isNew) {
+        await sendVerificationEmail(this.email, this.otp);
+    }
+    next();
 });
 
-module.exports = mongoose.model("OTP",OTPSchema);
+module.exports = mongoose.model("OTP", OTPSchema);
