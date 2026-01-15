@@ -1,4 +1,5 @@
 const otpTemplate = (otp) => {
+  const clientUrl = process.env.CLIENT_URL || "https://full-stack-project-1-study-notion-s-nine.vercel.app";
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -89,7 +90,7 @@ const otpTemplate = (otp) => {
 <body>
   <div class="wrapper">
     <div class="container">
-      <a href="https://studynotion-edtech-project.vercel.app">
+      <a href="${clientUrl}">
         <img class="logo" src="https://res.cloudinary.com/deujrq6nv/image/upload/StudyNotionMERNProject/devProfilePic.png" alt="StudyNotion Logo">
       </a>
 

@@ -8,6 +8,9 @@ const mailSender = require("../utils/mailSender");
 const bcrypt = require("bcrypt");
 const crypto = require("crypto");
 
+const clientUrl = process.env.CLIENT_URL || "https://full-stack-project-1-study-notion-s-nine.vercel.app";
+
+
 exports.resetPasswordToken = async (req,res) => {
     // console.log("hiiiii");
     
@@ -54,11 +57,15 @@ exports.resetPasswordToken = async (req,res) => {
 
         // distinct url
         // const url = `https://localhost:5173/update-password/${token}`;
-        const url = `localhost:5173/update-password/${token}`;
+        const url = `${clientUrl}/update-password/${token}`;
         
         try {
             // now send mail
-            await mailSender(email, "Password Reset Link", `Password Reset Link : ${url}`);
+            await mailSender(
+                email, 
+                "Password Reset Link", 
+                `You requested a password reset. Please click the link below to set a new password: \n\n ${url} \n\n This link is valid for 5 minutes.`
+            );
 
         } catch (error) {
             console.error("Error sending email:", error);
